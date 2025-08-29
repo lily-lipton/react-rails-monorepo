@@ -1,0 +1,32 @@
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "3306:3306"
+    # ホスト側のボリューム mysql_data をコンテナ内の `/var/lib/mysql` にマウントすることで、MySQLのデータを永続化
+    volumes:
+      - mysql_data:/var/lib/mysql
+  rails:
+    build:
+      context: ./src/backend
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -b '0.0.0.0'"
+    volumes:
+      - ./src/backend:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+    tty: true
+    stdin_open: true
+  react:
+    build:
+      context: ./src/frontend
+    volumes:
+      - ./src/frontend:/app
+    command: yarn start
+    ports:
+      - "8000:3000"
+volumes:
+  mysql_data:
