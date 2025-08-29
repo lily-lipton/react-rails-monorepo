@@ -20,5 +20,13 @@ services:
       - mysql
     tty: true
     stdin_open: true
+  react:
+    build:
+      context: ./src/frontend
+    volumes:
+      - ./src/frontend:/app
+    command: yarn start
+    ports:
+      - "8000:3000"
 volumes:
   mysql_data:
