@@ -10,10 +10,10 @@ services:
       - mysql_data:/var/lib/mysql
   rails:
     build:
-      context: ./src/rails
+      context: ./src/backend
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -b '0.0.0.0'"
     volumes:
-      - ./src/rails:/app
+      - ./src/backend:/app
     ports:
       - "3000:3000"
     depends_on:
